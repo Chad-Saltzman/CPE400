@@ -5,7 +5,11 @@ class Graph:
     def __init__(self, graphdict = {}):
         self.graph = graphdict 
         self.edges = self.generate_edges()
+        self.online = {}
 
+        for node in self.graph:
+            self.online[node] = True
+            
     def generate_edges(self):
         edges = []
 
@@ -51,6 +55,23 @@ class Graph:
             
         return nodes
 
+    def isOnline(self, node):
+        return self.online[node]
+
+    def disableNode(self):
+        choice = input("Would you like to disable a node? (Y/N) ")
+
+        while True:
+            if choice.upper() == 'Y':
+                node = input("Select a node to be disabled: ")
+                self.online[node] = False
+                break
+            elif choice.upper() == 'N':
+                break
+            else:
+                print("Invalid input")
+                choice = input("Would you like to disable a node? (Y/N) ")
+
     def getSourceAndDestinationNodes(self):
         nodes = self.getNodes()
         source = ""
@@ -60,8 +81,9 @@ class Graph:
         while source not in nodes:
             print(nodes)
             source = input()
-            if source not in nodes:
-                print("Invalid input")
+            if source not in nodes or not self.isOnline(source):
+                source = ""
+                print("Invalid input or current node is offline")
                 print("Select the source node from the following: ")
 
         print("\nSelect the destination node from the following: ")
@@ -69,8 +91,9 @@ class Graph:
         while destination not in nodes:
             print(nodes)
             destination = input()
-            if destination not in nodes:
-                print("Invalid input")
+            if destination not in nodes or not self.isOnline(destination):
+                destination = ""
+                print("Invalid input or current node is offline")
                 print("Select the destination node from the following: ")
 
         return source, destination
