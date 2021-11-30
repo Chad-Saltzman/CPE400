@@ -7,8 +7,9 @@ class Graph:
         self.edges = self.generate_edges()
         self.online = {}
 
-        for node in self.graph:
-            self.online[node] = True
+        if graphdict:
+            for node in self.graph:
+                self.online[node] = True
             
     def generate_edges(self):
         edges = []
@@ -37,6 +38,7 @@ class Graph:
                 line = line.split(",")
                 currentNode = line[0]
                 self.graph[currentNode] = {}
+                self.online[currentNode] = True
                 for node in line:
                     if node == currentNode:
                         continue
