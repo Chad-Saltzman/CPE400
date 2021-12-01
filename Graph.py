@@ -87,7 +87,6 @@ class Graph:
             else:
                 print("Invalid input")
                 choice = input("Would you like to disable a link? (Y/N) ")
-        return linkStart, linkEnd
 
     def getSourceAndDestinationNodes(self):
         nodes = self.getNodes()
