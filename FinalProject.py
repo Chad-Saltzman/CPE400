@@ -58,6 +58,7 @@ def main():
             print("Select a routing protocol to use: ")
 
     Network.disableNode()
+    Network.disableLink()
     source, destination = Network.getSourceAndDestinationNodes()
     if protocol == "RIP": 
         shortest_path = FindRoute.RIP(source = source,destination=destination, nodesOnline=Network.online)
