@@ -3,21 +3,20 @@ import re
 class Graph:
 
     def __init__(self, graphdict = {}):
-        self.graph = graphdict 
+        self.graph = graphdict
         self.edges = self.generate_edges()
         self.online = {}
-
+        
         if graphdict:
             for node in self.graph:
                 self.online[node] = True
-            
+
     def generate_edges(self):
         edges = []
-
+        
         for node in self.graph:
             for neighbour in self.graph[node]:
-                if neighbour:
-                    edges.append((node, neighbour))
+                    edges.append((node, neighbour))                  
         return edges 
     
     def __str__(self):
@@ -73,6 +72,22 @@ class Graph:
             else:
                 print("Invalid input")
                 choice = input("Would you like to disable a node? (Y/N) ")
+
+    def disableLink(self):
+        choice = input("Would you like to disable a link? (Y/N) ")
+
+        while True:
+            if choice.upper() == 'Y':
+                linkStart = input("Select the starting node of link to be disabled: ")
+                linkEnd = input("Select the ending node of link to be disabled: ")
+                self.online[linkEnd] = False
+                break
+            elif choice.upper() == 'N':
+                break
+            else:
+                print("Invalid input")
+                choice = input("Would you like to disable a link? (Y/N) ")
+        return linkStart, linkEnd
 
     def getSourceAndDestinationNodes(self):
         nodes = self.getNodes()
