@@ -9,18 +9,11 @@
 ######                                      ######
 ##################################################
 
-<<<<<<< Updated upstream
-
-from RoutingProtocol import *
-from Graph import *
-        
-=======
 from RoutingProtocol import *
 from Graph import *
 import sys
 
 #SampleGraph is a baseline graph provided in the Project description         
->>>>>>> Stashed changes
 sampleGraph = {
     'A':{'B':5},
     'B':{'A':5,'C':4,'D':2},
@@ -42,17 +35,10 @@ sampleGraph = {
 
 def main():
 
-    protocols = ["RIP","OSPF"]
+    protocols = ["RIP","OSPF", "Exit"]
     protocol = ""
 
     print("\t Failed Link/Node Routing Simulation")
-<<<<<<< Updated upstream
-
-    Choice = input("Would you like to use a predefined graph? Y/N: ")
-    if Choice.upper() == "Y":
-        print("The predefined graph is demonstrated below:")
-        Network = Graph(sampleGraph)
-=======
     # Continuously loops through the program so simulations of multiple situations can occur
     while True:
         Choice = input("Would you like to use a predefined graph? (Y/N)\n")
@@ -65,44 +51,15 @@ def main():
             user_graph = Network.getGraph()  # Retrieves the user inputted graph from CustomGraph.txt
             Network = Graph(user_graph)  # Creates a new instance of the graph class passing in the user inputted graph.
             print("The inserted graph is demonstrated below")
->>>>>>> Stashed changes
 
-    elif Choice.upper() == "N":
-        Network = Graph()
-        Network.getGraph()
-        print("The inserted graph is demonstrated below")
+        else:
+            while Choice.upper() != "Y" or Choice.upper() != "N":
+                Choice = input("Invalid input\nWould you like to use a predefined graph? Y/N:\n")
 
-<<<<<<< Updated upstream
-    else:
-        while Choice.upper() != "Y" or Choice.upper() != "N":
-            Choice = input("Invalid input\nWould you like to use a predefined graph? Y/N: ")
-=======
         print(Network) # Displays the network graph being used
->>>>>>> Stashed changes
 
-    print(Network)
+        FindRoute = RoutingProtocol(Network.graph)
 
-<<<<<<< Updated upstream
-    FindRoute = RoutingProtocol(Network.graph)
-
-    print("Select a routing protocol to use: ")
-    while protocol  != "RIP" and protocol != "OSPF":
-        print("1.RIP")
-        print("2.OSPF")
-        try:
-            protocol = protocols[int(input())-1]
-        except:
-            print("Invalid input")
-            print("Select a routing protocol to use: ")
-
-    Network.disableNode()
-    LS, LE = Network.disableLink()
-    source, destination = Network.getSourceAndDestinationNodes()
-    i = 0
-    j = 0
-    if protocol == "RIP": 
-        shortest_path = FindRoute.RIP(source = source,destination=destination, i=i, LS=LS, LE=LE, nodesOnline=Network.online, edgesAvail=Network.edges)
-=======
         print("Select a routing protocol to use: ")
         # Loops until a valid option is selected
         while protocol  not in protocols:
@@ -139,12 +96,7 @@ def main():
             else:
                 print("Invalid input")
                 choice = input("Would you like to run again? (Y/N) ")
->>>>>>> Stashed changes
 
-    elif protocol =="OSPF":
-        shortest_path = FindRoute.OSPF(source = source, destination = destination, j=j, LS=LS, LE=LE, nodesOnline=Network.online, edgesAvail=Network.edges)
-    print(f"The shortest path from {source} to {destination} is:")
-    print(shortest_path)
 
 if __name__ == '__main__':
     main() 
