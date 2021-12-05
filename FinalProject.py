@@ -58,13 +58,15 @@ def main():
             print("Select a routing protocol to use: ")
 
     Network.disableNode()
-    Network.disableLink()
+    LS, LE = Network.disableLink()
     source, destination = Network.getSourceAndDestinationNodes()
+    i = 0
+    j = 0
     if protocol == "RIP": 
-        shortest_path = FindRoute.RIP(source = source,destination=destination, nodesOnline=Network.online)
+        shortest_path = FindRoute.RIP(source = source,destination=destination, i=i, LS=LS, LE=LE, nodesOnline=Network.online, edgesAvail=Network.edges)
 
     elif protocol =="OSPF":
-        shortest_path = FindRoute.OSPF(source = source, destination = destination, nodesOnline=Network.online)
+        shortest_path = FindRoute.OSPF(source = source, destination = destination, j=j, LS=LS, LE=LE, nodesOnline=Network.online, edgesAvail=Network.edges)
     print(f"The shortest path from {source} to {destination} is:")
     print(shortest_path)
 
