@@ -1,7 +1,9 @@
 
 
+from typing import Protocol
 from RoutingProtocol import *
 from Graph import *
+import sys
         
 sampleGraph = {
     'A':{'B':5},
@@ -24,48 +26,65 @@ sampleGraph = {
 
 def main():
 
-    protocols = ["RIP","OSPF"]
+    protocols = ["RIP","OSPF", "Exit"]
     protocol = ""
 
     print("\t Failed Link/Node Routing Simulation")
+    while True:
+        Choice = input("Would you like to use a predefined graph? (Y/N)\n")
+        if Choice.upper() == "Y":
+            print("The predefined graph is demonstrated below:")
+            Network = Graph(sampleGraph)
 
-    Choice = input("Would you like to use a predefined graph? Y/N: ")
-    if Choice.upper() == "Y":
-        print("The predefined graph is demonstrated below:")
-        Network = Graph(sampleGraph)
+        elif Choice.upper() == "N":
+            Network = Graph()
+            Network.getGraph()
+            print("The inserted graph is demonstrated below")
 
-    elif Choice.upper() == "N":
-        Network = Graph()
-        Network.getGraph()
-        print("The inserted graph is demonstrated below")
+        else:
+            while Choice.upper() != "Y" or Choice.upper() != "N":
+                Choice = input("Invalid input\nWould you like to use a predefined graph? Y/N:\n")
 
-    else:
-        while Choice.upper() != "Y" or Choice.upper() != "N":
-            Choice = input("Invalid input\nWould you like to use a predefined graph? Y/N: ")
+        print(Network)
 
-    print(Network)
+        FindRoute = RoutingProtocol(Network.graph)
 
-    FindRoute = RoutingProtocol(Network.graph)
+        print("Select a routing protocol to use: ")
+        while protocol  not in protocols:
+            print("1.RIP")
+            print("2.OSPF")
+            print("3.Exit")
+            try:
+                protocol = protocols[int(input())-1]
+            except:
+                print("Invalid input")
+                print("Select a routing protocol to use: ")
+        if protocol == "Exit":
+            sys.exit()
+        
+        Network.disableNode()
+        Network.disableLink()
+        source, destination = Network.getSourceAndDestinationNodes()
+        print(protocol)
+        
+        if protocol == "RIP": 
+            shortest_path = FindRoute.RIP(source = source,destination=destination, nodesOnline=Network.online)
 
-    print("Select a routing protocol to use: ")
-    while protocol  != "RIP" and protocol != "OSPF":
-        print("1.RIP")
-        print("2.OSPF")
-        try:
-            protocol = protocols[int(input())-1]
-        except:
-            print("Invalid input")
-            print("Select a routing protocol to use: ")
+        elif protocol =="OSPF":
+            shortest_path = FindRoute.OSPF(source = source, destination = destination, nodesOnline=Network.online)
+        print(f"The shortest path from {source} to {destination} is:")
+        print(shortest_path)
+        print()
+        choice = input("Would you like to run again? (Y/N) ")
+        while True:
+            if choice.upper() == "Y":
+                break 
+            elif choice.upper() == "N":
+                sys.exit()
+            else:
+                print("Invalid input")
+                choice = input("Would you like to run again? (Y/N) ")
 
-    Network.disableNode()
-    source, destination = Network.getSourceAndDestinationNodes()
-    if protocol == "RIP": 
-        shortest_path = FindRoute.RIP(source = source,destination=destination, nodesOnline=Network.online)
-
-    elif protocol =="OSPF":
-        shortest_path = FindRoute.OSPF(source = source, destination = destination, nodesOnline=Network.online)
-    print(f"The shortest path from {source} to {destination} is:")
-    print(shortest_path)
 
 if __name__ == '__main__':
     main()

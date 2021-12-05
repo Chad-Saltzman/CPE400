@@ -1,9 +1,10 @@
 import re 
+import copy
 
 class Graph:
 
     def __init__(self, graphdict = {}):
-        self.graph = graphdict 
+        self.graph = copy.deepcopy(graphdict)
         self.edges = self.generate_edges()
         self.online = {}
 
@@ -60,42 +61,60 @@ class Graph:
     def isOnline(self, node):
         return self.online[node]
 
-    def disableNode(self):
-        choice = input("Would you like to disable a node? (Y/N) ")
+    def disableLink(self):
+        choice = input("Would you like to disable a link? (Y/N)")
 
         while True:
             if choice.upper() == 'Y':
-                node = input("Select a node to be disabled: ")
+                node1 = input(f"select the starting node that the link is connected to\n{self.getNodes()}\n").upper()
+                node2 = input(f"select the ending node that the link is connected to\n{self.getNodes()} \n").upper()
+                self.graph[node1].pop(node2.upper(),"Link does not exist")
+                link_exists = self.graph[node2].pop(node1.upper(),"Link does not exist")
+                if link_exists == "Link does not exist":
+                    print(link_exists)
+                    continue 
+                print(f"The link from {node1} to {node2} is now offline")
+                choice = input("Would you like to disable another link? (Y/N)\n")
+            elif choice.upper() == "N":
+                    break 
+            else:
+                print("Invalid input")
+                choice = input("Would you like to disable a node? (Y/N)\n")
+
+    def disableNode(self):
+        choice = input("Would you like to disable a node? (Y/N)\n")
+
+        while True:
+            if choice.upper() == 'Y':
+                node = input(f"Select a node to be disabled\n{self.getNodes()}\n").upper()
                 self.online[node] = False
-                break
+                print(f"node {node} is now offline")
+                choice = input("Would you like to disable another node? (Y/N)\n")
             elif choice.upper() == 'N':
                 break
             else:
                 print("Invalid input")
-                choice = input("Would you like to disable a node? (Y/N) ")
+                choice = input("Would you like to disable a node? (Y/N)\n")
 
     def getSourceAndDestinationNodes(self):
         nodes = self.getNodes()
         source = ""
         destination = ""
-        print("Select the source node from the following: ")
 
+        source = input(f"Select the source node from the following\n{self.getNodes()}\n").upper()
         while source not in nodes:
-            print(nodes)
-            source = input()
+            
             if source not in nodes or not self.isOnline(source):
                 source = ""
                 print("Invalid input or current node is offline")
-                print("Select the source node from the following: ")
+                source = input(f"Select the source node from the following:\n{self.getNodes()}\n").upper()
 
-        print("\nSelect the destination node from the following: ")
+        destination = input(f"\nSelect the destination node from the following:\n{self.getNodes()}\n").upper()
 
         while destination not in nodes:
-            print(nodes)
-            destination = input()
             if destination not in nodes or not self.isOnline(destination):
                 destination = ""
                 print("Invalid input or current node is offline")
-                print("Select the destination node from the following: ")
+                destination = input(f"Select the destination node from the following:\n{self.getNodes()}\n").upper()
 
         return source, destination
