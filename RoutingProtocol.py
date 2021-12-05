@@ -2,20 +2,32 @@ class RoutingProtocol:
     def __init__(self, graph):
         self.graph = graph 
     
-    def RIP(self, source, destination, nodesOnline, path = []):
+    def RIP(self, source, destination, i, LS, LE, nodesOnline, edgesAvail, path = []):
         path = path + [source]
         if source == destination:
             return path
         shortest = None
         for node in self.graph[source]:
             if node not in path and nodesOnline[node]:
-                newpath = self.RIP(node, destination, nodesOnline, path)
-                if newpath:
-                    if not shortest or len(newpath) < len(shortest):
-                        shortest = newpath
+                if LS not in path:
+                    newpath = self.RIP(node, destination, i, LS, LE, nodesOnline, edgesAvail, path)
+                    if newpath:
+                        i = i+1
+                        if (not shortest or len(newpath) < len(shortest)) and ((LS, LE) not in path):
+                            shortest = newpath
+
+                else:
+                    if path[i] != LS and node != LE:
+                        newpath = self.RIP(node, destination, i, LS, LE, nodesOnline, edgesAvail, path)
+                        if newpath:
+                            i = i+1
+                            if (not shortest or len(newpath) < len(shortest)) and ((LS, LE) not in path):
+                                shortest = newpath
+                    else:
+                        newpath = self.RIP(node, destination, i, LS, LE, nodesOnline, edgesAvail, path)
         return shortest
 
-    def OSPF(self, source, destination, nodesOnline, path = []):
+    def OSPF(self, source, destination, j, LS, LE, nodesOnline, edgesAvail, path = []):
         
         def getCost(newPath):
             cost = 0
@@ -32,8 +44,21 @@ class RoutingProtocol:
         shortest = None 
         for node in self.graph[source]:
             if node not in path and nodesOnline[node]:
-                newpath = self.OSPF(node, destination, nodesOnline, path)
-                if newpath:
-                    if not shortest or getCost(newpath) < getCost(shortest):
-                        shortest = newpath 
+                if LS not in path:
+                    #if node == LE:
+                    newpath = self.RIP(node, destination, j, LS, LE, nodesOnline, edgesAvail, path)
+                    if newpath:
+                        j = j+1
+                        if (not shortest or len(newpath) < len(shortest)) and ((LS, LE) not in path):
+                            shortest = newpath
+
+                else:
+                    if path[j] != LS and node != LE:
+                        newpath = self.RIP(node, destination, j, LS, LE, nodesOnline, edgesAvail, path)
+                        if newpath:
+                            j = j+1
+                            if (not shortest or len(newpath) < len(shortest)) and ((LS, LE) not in path):
+                                shortest = newpath
+                    else:
+                        newpath = self.RIP(node, destination, j, LS, LE, nodesOnline, edgesAvail, path)
         return shortest
