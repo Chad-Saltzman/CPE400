@@ -128,20 +128,17 @@ class Graph:
         source = input(f"Select the source node from the following\n{self.getNodes()}\n").upper()
         
         # Loops until the user selects an available node
-        while source not in nodes:
-            
-            if source not in nodes or not self.isOnline(source):
-                source = ""
-                print("Invalid input or current node is offline")
-                source = input(f"Select the source node from the following:\n{self.getNodes()}\n").upper()
+        while source not in nodes or not self.isOnline(source):
+            source = ""
+            print("Invalid input or current node is offline")
+            source = input(f"Select the source node from the following:\n{self.getNodes()}\n").upper()
 
         destination = input(f"\nSelect the destination node from the following:\n{self.getNodes()}\n").upper()
 
         # Loops until the user selects an available destination node
-        while destination not in nodes:
-            if destination not in nodes or not self.isOnline(destination):
-                destination = ""
-                print("Invalid input or current node is offline")
-                destination = input(f"Select the destination node from the following:\n{self.getNodes()}\n").upper()
+        while destination not in nodes or not self.isOnline(destination):
+            destination = ""
+            print("Invalid input or current node is offline")
+            destination = input(f"Select the destination node from the following:\n{self.getNodes()}\n").upper()
 
         return source, destination
